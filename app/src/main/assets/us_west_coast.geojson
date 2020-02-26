@@ -1,0 +1,22 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "name": "Washington",
+        "capital": "Olympia"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.90480,
+          47.03676
+        ]
+      }
+    }
+  ]
+}
