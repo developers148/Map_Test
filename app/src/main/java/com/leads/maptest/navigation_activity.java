@@ -87,6 +87,7 @@ private MapView mapView;
                 addDestinationIconSymbolLayer(style);
 
                 mapboxMap.addOnMapClickListener(navigation_activity.this);
+
                 button = findViewById(R.id.startButton);
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -94,7 +95,7 @@ private MapView mapView;
                         boolean simulateRoute = true;
                         NavigationLauncherOptions options = NavigationLauncherOptions.builder()
                                 .directionsRoute(currentRoute)
-                                //.shouldSimulateRoute(simulateRoute)
+                                .shouldSimulateRoute(simulateRoute)
                                 .build();
 // Call this method with Context from within an Activity
                         NavigationLauncher.startNavigation(navigation_activity.this, options);
@@ -165,6 +166,7 @@ private MapView mapView;
                         } else {
                             navigationMapRoute = new NavigationMapRoute(null, mapView, mapboxMap, R.style.NavigationMapRoute);
                         }
+
                         navigationMapRoute.addRoute(currentRoute);
                     }
 
