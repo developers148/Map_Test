@@ -1,8 +1,5 @@
 package com.leads.maptest;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -18,6 +15,9 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.mapboxsdk.Mapbox;
@@ -32,7 +32,6 @@ import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;

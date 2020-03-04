@@ -15,6 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        mapbox:mapbox_uiRotateGestures="true"
         mapbox:mapbox_cameraTargetLat="23.749831"
         mapbox:mapbox_cameraTargetLng="90.393358"
         mapbox:mapbox_cameraZoom="12" />
