@@ -3,8 +3,11 @@ package com.leads.maptest;
 import android.annotation.SuppressLint;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.mapbox.android.core.location.LocationEngine;
 import com.mapbox.android.core.location.LocationEngineCallback;
 import com.mapbox.android.core.location.LocationEngineProvider;
@@ -38,8 +41,8 @@ public class trackingUserActivity extends AppCompatActivity implements
     private MapView mapView;
     private PermissionsManager permissionsManager;
     private LocationEngine locationEngine;
-    private LocationChangeListeningActivityLocationCallback callback =
-            new LocationChangeListeningActivityLocationCallback(this);
+    private LocationChangeListeningActivityLocationCallback callback = new LocationChangeListeningActivityLocationCallback(this);
+    DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +55,9 @@ public class trackingUserActivity extends AppCompatActivity implements
         // This contains the MapView in XML and needs to be called after the access token is configured.
         setContentView(R.layout.activity_tracking_user);
 
+
+
+databaseReference = FirebaseDatabase.getInstance().getReference();
         mapView = findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
@@ -118,6 +124,7 @@ public class trackingUserActivity extends AppCompatActivity implements
                 .setMaxWaitTime(DEFAULT_MAX_WAIT_TIME).build();
 
         locationEngine.requestLocationUpdates(request, callback, getMainLooper());
+
         locationEngine.getLastLocation(callback);
     }
 
@@ -172,7 +179,11 @@ public class trackingUserActivity extends AppCompatActivity implements
                 }
 
                 // Create a Toast which displays the new location's coordinates
-                Toast.makeText(activity,"new Location"+String.valueOf(result.getLastLocation().getLatitude())+String.valueOf(result.getLastLocation().getLongitude()),Toast.LENGTH_SHORT).show();
+                //Toast.makeText(activity,"new Location"+String.valueOf(result.getLastLocation().getLatitude())+String.valueOf(result.getLastLocation().getLongitude()),Toast.LENGTH_SHORT).show();
+                Log.e("new Location","new Location"+String.valueOf(result.getLastLocation().getLatitude())+String.valueOf(result.getLastLocation().getLongitude()));
+
+                activity.databaseReference.child("loc").setValue(result.getLastLocation().getLatitude()+","+result.getLastLocation().getLongitude());
+
 
                 // Pass the new location to the Maps SDK's LocationComponent
                 if (activity.mapboxMap != null && result.getLastLocation() != null) {

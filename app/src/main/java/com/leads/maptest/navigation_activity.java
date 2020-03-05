@@ -7,6 +7,13 @@ import java.util.List;
 import android.widget.Toast;
 
 // classes needed to initialize map
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.mapbox.api.directions.v5.DirectionsCriteria;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.maps.MapView;
@@ -38,6 +45,7 @@ import com.mapbox.api.directions.v5.models.DirectionsResponse;
 import com.mapbox.api.directions.v5.models.DirectionsRoute;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -65,6 +73,7 @@ private MapView mapView;
     private NavigationMapRoute navigationMapRoute;
     // variables needed to initialize navigation
     private Button button;
+    Point finalpoint;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +110,11 @@ private MapView mapView;
                         NavigationLauncher.startNavigation(navigation_activity.this, options);
                     }
                 });
+
+
+                button.setEnabled(true);
+
+
             }
         });
     }
@@ -123,17 +137,7 @@ private MapView mapView;
     @Override
     public boolean onMapClick(@NonNull LatLng point) {
 
-        Point destinationPoint = Point.fromLngLat(point.getLongitude(), point.getLatitude());
-        Point originPoint = Point.fromLngLat(locationComponent.getLastKnownLocation().getLongitude(), locationComponent.getLastKnownLocation().getLatitude());
 
-
-        GeoJsonSource source = mapboxMap.getStyle().getSourceAs("destination-source-id");
-        if (source != null) {
-            source.setGeoJson(Feature.fromGeometry(destinationPoint));
-        }
-
-        getRoute(originPoint, destinationPoint);
-        button.setEnabled(true);
         //button.setBackgroundResource(R.color.mapboxBlue);
         return true;
     }

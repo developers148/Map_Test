@@ -6,6 +6,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.mapboxsdk.Mapbox;
@@ -35,6 +39,7 @@ public class showUserLocation extends AppCompatActivity implements OnMapReadyCal
 
 // This contains the MapView in XML and needs to be called after the access token is configured.
         setContentView(R.layout.activity_show_user_location);
+
 
         mapView = findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
@@ -74,7 +79,7 @@ public class showUserLocation extends AppCompatActivity implements OnMapReadyCal
             locationComponent.setCameraMode(CameraMode.TRACKING);
 
 // Set the component's render mode
-            locationComponent.setRenderMode(RenderMode.NORMAL);
+            locationComponent.setRenderMode(RenderMode.COMPASS);
         } else {
             permissionsManager = new PermissionsManager(this);
             permissionsManager.requestLocationPermissions(this);

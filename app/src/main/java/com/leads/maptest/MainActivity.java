@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        startActivity(new Intent(this,navigation_activity.class));
+        startActivity(new Intent(this,showDestination.class));
 
 
         mapView = findViewById(R.id.mapView);
@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
     }
     private void setUpImage(@NonNull Style loadedStyle) {
         loadedStyle.addImage("MARKER_IMAGE_ID", BitmapFactory.decodeResource(
-                this.getResources(), R.drawable.red_marker));
+                this.getResources(), R.drawable.green));
     }
     private void setUpMarkerLayer(@NonNull Style loadedStyle) {
         loadedStyle.addLayer(new SymbolLayer("MARKER_LAYER_ID", "GEOJSON_SOURCE_ID")
