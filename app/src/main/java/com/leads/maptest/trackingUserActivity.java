@@ -167,6 +167,7 @@ databaseReference = FirebaseDatabase.getInstance().getReference();
          *
          * @param result the LocationEngineResult object which has the last known location within it.
          */
+        @SuppressLint("LogNotTimber")
         @Override
         public void onSuccess(LocationEngineResult result) {
             trackingUserActivity activity = activityWeakReference.get();
@@ -180,7 +181,7 @@ databaseReference = FirebaseDatabase.getInstance().getReference();
 
                 // Create a Toast which displays the new location's coordinates
                 //Toast.makeText(activity,"new Location"+String.valueOf(result.getLastLocation().getLatitude())+String.valueOf(result.getLastLocation().getLongitude()),Toast.LENGTH_SHORT).show();
-                Log.e("new Location","new Location"+String.valueOf(result.getLastLocation().getLatitude())+String.valueOf(result.getLastLocation().getLongitude()));
+                Log.e("new Location",String.valueOf(result.getLastLocation().getLatitude())+String.valueOf(result.getLastLocation().getLongitude()));
 
                 activity.databaseReference.child("loc").setValue(result.getLastLocation().getLatitude()+","+result.getLastLocation().getLongitude());
 

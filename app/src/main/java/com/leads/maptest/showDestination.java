@@ -143,7 +143,7 @@ public class showDestination extends AppCompatActivity implements PermissionsLis
                                 Toast.makeText(showDestination.this,"child changed"+ dataSnapshot.getValue().toString(), Toast.LENGTH_SHORT).show();
                                 setupdata(dataSnapshot,style);
 
-                                
+
                                 newinitLayers(style);
 
 
