@@ -56,6 +56,7 @@ import com.mapbox.mapboxsdk.utils.BitmapUtils;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
+import java.util.Random;
 
 import androidx.annotation.NonNull;
 import retrofit2.Call;
@@ -73,11 +74,11 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineJoin;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineWidth;
 
 public class showDestination extends AppCompatActivity implements PermissionsListener {
-    private static final String ROUTE_LAYER_ID = "route-layer-id";
-    private static final String ROUTE_SOURCE_ID = "route-source-id";
-    private static final String ICON_LAYER_ID = "icon-layer-id";
-    private static final String ICON_SOURCE_ID = "icon-source-id";
-    private static final String RED_PIN_ICON_ID = "red-pin-icon-id";
+    private static  String ROUTE_LAYER_ID = "route-layer-id";
+    private static  String ROUTE_SOURCE_ID = "route-source-id";
+    private static  String ICON_LAYER_ID = "icon-layer-id";
+    private static  String ICON_SOURCE_ID = "icon-source-id";
+    private static  String RED_PIN_ICON_ID = "red-pin-icon-id";
     private MapView mapView;
     private DirectionsRoute currentRoute;
     private MapboxDirections client;
@@ -133,17 +134,22 @@ public class showDestination extends AppCompatActivity implements PermissionsLis
                             @Override
                             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                                 Toast.makeText(showDestination.this,"child added"+ dataSnapshot.getValue().toString(), Toast.LENGTH_SHORT).show();
+
+
+
                                 setupdata(dataSnapshot,style);
-                                initSource(style);
+
+                                //initSource(style);
                                 initLayers(style);
                             }
 
                             @Override
                             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                                 Toast.makeText(showDestination.this,"child changed"+ dataSnapshot.getValue().toString(), Toast.LENGTH_SHORT).show();
+
+                                style.removeSource(ROUTE_SOURCE_ID);
+
                                 setupdata(dataSnapshot,style);
-
-
                                 newinitLayers(style);
 
 
@@ -155,7 +161,6 @@ public class showDestination extends AppCompatActivity implements PermissionsLis
 
                                 setupdata(dataSnapshot,style);
                                 newinitLayers(style);
-
                             }
 
                             @Override
@@ -182,6 +187,18 @@ public class showDestination extends AppCompatActivity implements PermissionsLis
     }
 
 
+    public String random() {
+        Random generator = new Random();
+        StringBuilder randomStringBuilder = new StringBuilder();
+        int randomLength = generator.nextInt(100000);
+        char tempChar;
+        for (int i = 0; i < randomLength; i++){
+            tempChar = (char) (generator.nextInt(96) + 32);
+            randomStringBuilder.append(tempChar);
+        }
+        return randomStringBuilder.toString();
+    }
+
     void setupdata(DataSnapshot snapshot, Style style){
         destinationPoint = Point.fromLngLat(Double.parseDouble(snapshot.getValue().toString().split(",")[1]), Double.parseDouble(snapshot.getValue().toString().split(",")[0]));
 
@@ -190,22 +207,51 @@ public class showDestination extends AppCompatActivity implements PermissionsLis
         GeoJsonSource source = mapbo.getStyle().getSourceAs("destination-source-id");
         if (source != null) {
             source.setGeoJson(Feature.fromGeometry(destinationPoint));
+            style.addSource(source);
         }
+
+
+        GeoJsonSource firstsource = mapbo.getStyle().getSourceAs(ROUTE_SOURCE_ID);
+        if(firstsource!=null){
+            ROUTE_SOURCE_ID = random();
+
+            GeoJsonSource gsource = new GeoJsonSource(ROUTE_SOURCE_ID,FeatureCollection.fromFeatures(new Feature[] {}));
+            style.addSource(gsource);
+        }else {
+            GeoJsonSource gsource = new GeoJsonSource(ROUTE_SOURCE_ID,FeatureCollection.fromFeatures(new Feature[] {}));
+            style.addSource(gsource);
+
+
+        }
+
+        GeoJsonSource secondsource  = mapbo.getStyle().getSourceAs(ICON_SOURCE_ID);
+        if(secondsource!=null){
+            ICON_SOURCE_ID = random();
+
+            GeoJsonSource iconGeoJsonSource = new GeoJsonSource(ICON_SOURCE_ID, FeatureCollection.fromFeatures(new Feature[] {
+                    Feature.fromGeometry(Point.fromLngLat(originPoint.longitude(), originPoint.latitude())),
+                    Feature.fromGeometry(Point.fromLngLat(destinationPoint.longitude(), destinationPoint.latitude()))}));
+            style.addSource(iconGeoJsonSource);
+        }else {
+            GeoJsonSource iconGeoJsonSource = new GeoJsonSource(ICON_SOURCE_ID, FeatureCollection.fromFeatures(new Feature[] {
+                    Feature.fromGeometry(Point.fromLngLat(originPoint.longitude(), originPoint.latitude())),
+                    Feature.fromGeometry(Point.fromLngLat(destinationPoint.longitude(), destinationPoint.latitude()))}));
+            style.addSource(iconGeoJsonSource);
+        }
+
+
+
+
+
+
+
         getRoute(mapbo,originPoint, destinationPoint);
     }
 
     /**
      * Add the route and marker sources to the map
      */
-    private void initSource(@NonNull Style loadedMapStyle) {
-        loadedMapStyle.addSource(new GeoJsonSource(ROUTE_SOURCE_ID,
-                FeatureCollection.fromFeatures(new Feature[] {})));
 
-        GeoJsonSource iconGeoJsonSource = new GeoJsonSource(ICON_SOURCE_ID, FeatureCollection.fromFeatures(new Feature[] {
-                Feature.fromGeometry(Point.fromLngLat(originPoint.longitude(), originPoint.latitude())),
-                Feature.fromGeometry(Point.fromLngLat(destinationPoint.longitude(), destinationPoint.latitude()))}));
-        loadedMapStyle.addSource(iconGeoJsonSource);
-    }
 
 
     /**
@@ -262,24 +308,6 @@ public class showDestination extends AppCompatActivity implements PermissionsLis
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     /**
      * Make a request to the Mapbox Directions API. Once successful, pass the route to the
      * route layer.
@@ -329,24 +357,22 @@ public class showDestination extends AppCompatActivity implements PermissionsLis
 // Make a toast which displays the route's distance
                 Toast.makeText(showDestination.this, "distance = " +String.valueOf(currentRoute.distance()), Toast.LENGTH_SHORT).show();
 
-                if (mapboxMap != null) {
-                    mapboxMap.getStyle(new Style.OnStyleLoaded() {
-                        @Override
-                        public void onStyleLoaded(@NonNull Style style) {
+                mapboxMap.getStyle(new Style.OnStyleLoaded() {
+                    @Override
+                    public void onStyleLoaded(@NonNull Style style) {
 
 // Retrieve and update the source designated for showing the directions route
-                            GeoJsonSource source = style.getSourceAs(ROUTE_SOURCE_ID);
+                        GeoJsonSource source = style.getSourceAs(ROUTE_SOURCE_ID);
 
 // Create a LineString with the directions route's geometry and
 // reset the GeoJSON source for the route LineLayer source
-                            if (source != null) {
-                                Log.e("onResponse:"," source != null");
-                                source.setGeoJson(FeatureCollection.fromFeature(
-                                        Feature.fromGeometry(LineString.fromPolyline(currentRoute.geometry(), PRECISION_6))));
-                            }
+                        if (source != null) {
+                            Log.e("onResponse:"," source != null");
+                            source.setGeoJson(FeatureCollection.fromFeature(
+                                    Feature.fromGeometry(LineString.fromPolyline(currentRoute.geometry(), PRECISION_6))));
                         }
-                    });
-                }
+                    }
+                });
             }
 
             @Override

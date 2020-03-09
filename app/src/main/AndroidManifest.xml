@@ -12,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".showUserLocation"/>
+        <activity android:name=".showPositionActivity"></activity>
+        <activity android:name=".showUserLocation" />
         <activity android:name=".trackingUserActivity" />
         <activity android:name=".navigation_activity" />
         <activity android:name=".pointactivity" />
