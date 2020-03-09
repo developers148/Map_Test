@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        startActivity(new Intent(this,showDestination.class));
+        startActivity(new Intent(this,showPositionActivity.class));
 
 
         mapView = findViewById(R.id.mapView);

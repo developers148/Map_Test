@@ -28,6 +28,8 @@ import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.mapbox.mapboxsdk.utils.BitmapUtils;
 
+import java.util.Objects;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import retrofit2.Call;
@@ -92,10 +94,10 @@ public class pointactivity extends AppCompatActivity implements MapboxMap.OnMapC
             public void onMapReady(@NonNull MapboxMap mapboxMap) {
                 pointactivity.this.mapboxMap = mapboxMap;
                 mapboxMap.setStyle(new Style.Builder().fromUri(Style.MAPBOX_STREETS)
-                        .withImage(ORIGIN_ICON_ID, BitmapUtils.getBitmapFromDrawable(
-                                getResources().getDrawable(R.drawable.blue_marker)))
-                        .withImage(DESTINATION_ICON_ID, BitmapUtils.getBitmapFromDrawable(
-                                getResources().getDrawable(R.drawable.red_marker))), new Style.OnStyleLoaded() {
+                        .withImage(ORIGIN_ICON_ID, Objects.requireNonNull(BitmapUtils.getBitmapFromDrawable(
+                                getResources().getDrawable(R.drawable.blue_marker))))
+                        .withImage(DESTINATION_ICON_ID, Objects.requireNonNull(BitmapUtils.getBitmapFromDrawable(
+                                getResources().getDrawable(R.drawable.red_marker)))), new Style.OnStyleLoaded() {
                     @Override
                     public void onStyleLoaded(@NonNull Style style) {
                         initSources(style);
